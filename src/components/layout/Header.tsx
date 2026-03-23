@@ -9,7 +9,6 @@ import {
   X,
   MapPin,
   ChevronDown,
-  Bell,
   Heart,
   Zap,
 } from "lucide-react";
@@ -17,7 +16,9 @@ import SearchBar from "@/components/ui/SearchBar";
 import { 
   useAppDispatch, useAppSelector, 
   selectCartCount, toggleDrawer, 
-  openLocationDrawer, selectLocationDetails 
+  openLocationDrawer, selectLocationDetails,
+  openAuthDrawer, selectIsAuthenticated, selectUser,
+  openWishlistDrawer, selectWishlistCount,
 } from "@/store";
 
 const NAV_CATEGORIES = [
@@ -33,9 +34,12 @@ const NAV_CATEGORIES = [
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const dispatch  = useAppDispatch();
-  const cartCount = useAppSelector(selectCartCount);
-  const location  = useAppSelector(selectLocationDetails);
+  const dispatch        = useAppDispatch();
+  const cartCount       = useAppSelector(selectCartCount);
+  const location        = useAppSelector(selectLocationDetails);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const user            = useAppSelector(selectUser);
+  const wishlistCount   = useAppSelector(selectWishlistCount);
 
   return (
     <>
@@ -86,37 +90,56 @@ export default function Header() {
             {/* ── Right Actions ── */}
             <div className="flex items-center gap-1 shrink-0">
 
-              {/* Notifications */}
-              <button className="hidden sm:flex relative p-2.5 rounded-xl hover:bg-gray-50 transition-colors group">
-                <Bell size={20} className="text-gray-500 group-hover:text-orange-500 transition-colors" />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white" />
-              </button>
-
               {/* Wishlist */}
-              <Link
-                href="/wishlist"
-                className="hidden sm:flex relative p-2.5 rounded-xl hover:bg-gray-50 transition-colors group"
+              <button
+                onClick={() => dispatch(openWishlistDrawer())}
+                className="hidden sm:flex relative p-2.5 rounded-xl hover:bg-rose-50 transition-colors group"
+                aria-label="Wishlist"
               >
                 <Heart size={20} className="text-gray-500 group-hover:text-rose-500 transition-colors" />
-                <span className="absolute top-1 right-1 w-4 h-4 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white">
-                  2
-                </span>
-              </Link>
+                {wishlistCount > 0 && (
+                  <span className="absolute top-1 right-1 w-4 h-4 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white">
+                    {wishlistCount}
+                  </span>
+                )}
+              </button>
 
               {/* Account */}
-              <Link
-                href="/account"
-                className="hidden md:flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-gray-50 transition-colors border border-gray-100 group"
+              <button
+                onClick={() => {
+                  if (isAuthenticated) {
+                    dispatch(openAuthDrawer());
+                  } else {
+                    dispatch(openAuthDrawer('signin'));
+                  }
+                }}
+                className="hidden md:flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-orange-50 transition-colors border border-gray-100 hover:border-orange-200 group cursor-pointer"
               >
-                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-violet-400 to-indigo-500 flex items-center justify-center shadow-sm">
-                  <User size={13} className="text-white" />
-                </div>
-                <div className="leading-tight text-left">
-                  <p className="text-[10px] text-gray-400">Hello, Guest</p>
-                  <p className="text-xs font-bold text-gray-700">Sign In</p>
-                </div>
+                {isAuthenticated && user ? (
+                  <>
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-rose-500 flex items-center justify-center shadow-md shadow-orange-200 ring-2 ring-orange-100">
+                      <span className="text-white text-xs font-black leading-none">
+                        {user.name?.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="leading-tight text-left">
+                      <p className="text-[10px] text-orange-500 font-semibold">Welcome back</p>
+                      <p className="text-xs font-bold text-gray-800 max-w-[90px] truncate">{user.name}</p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="w-8 h-8 rounded-full bg-orange-50 border-2 border-orange-200 flex items-center justify-center group-hover:bg-orange-100 transition-colors">
+                      <User size={14} className="text-orange-500" />
+                    </div>
+                    <div className="leading-tight text-left">
+                      <p className="text-[10px] text-gray-400">Hello, Guest</p>
+                      <p className="text-xs font-bold text-orange-500 group-hover:text-orange-600 transition-colors">Sign In</p>
+                    </div>
+                  </>
+                )}
                 <ChevronDown size={13} className="text-gray-400 group-hover:text-orange-500 transition-colors" />
-              </Link>
+              </button>
 
               {/* Cart */}
               <button

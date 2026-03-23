@@ -3,12 +3,16 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import cartReducer from "./cartSlice";
 import authReducer from "./authSlice";
 import locationReducer from "./locationSlice";
+import addressReducer from "./addressSlice";
+import wishlistReducer from "./wishlistSlice";
 
 export const store = configureStore({
   reducer: {
     cart: cartReducer,
     auth: authReducer,
     location: locationReducer,
+    address: addressReducer,
+    wishlist: wishlistReducer,
   },
 });
 

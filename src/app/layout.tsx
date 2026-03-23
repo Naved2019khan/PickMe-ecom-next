@@ -5,6 +5,7 @@ import ReduxProvider from "@/components/providers/ReduxProvider";
 import CartDrawer from "@/components/ui/CartDrawer";
 import AuthDrawer from "@/components/ui/AuthDrawer";
 import LocationDrawer from "@/components/ui/LocationDrawer";
+import WishlistDrawer from "@/components/ui/WishlistDrawer";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
@@ -39,6 +40,7 @@ export default function RootLayout({
           <CartDrawer />
           <AuthDrawer />
           <LocationDrawer />
+          <WishlistDrawer />
         </ReduxProvider>
       </body>
     </html>

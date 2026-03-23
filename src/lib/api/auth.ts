@@ -12,18 +12,18 @@ const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
 // Mock Database of users
 const MOCK_DB: User[] = [
-  { id: "u1", name: "Ajitesh Kumar", email: "ajitesh@example.com", phone: "+91 9876543210" }
+  { id: "u1", name: "Naved Khan", email: "naved@gmail.com", phone: "+91 9876543210" }
 ];
 
-export async function loginApi(email: string, password: string):Promise<User> {
+export async function loginApi(email: string, password: string): Promise<User> {
   await delay(1000);
 
   if (password !== 'password') { // any password but "password" works for this mock, but let's make anything work unless it's empty
-      if (!password) throw new Error("Password is required");
+    if (!password) throw new Error("Password is required");
   }
 
   const user = MOCK_DB.find(u => u.email.toLowerCase() === email.toLowerCase());
-  
+
   if (!user) {
     throw new Error("Invalid email or password");
   }

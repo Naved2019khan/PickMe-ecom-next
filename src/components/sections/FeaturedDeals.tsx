@@ -1,3 +1,5 @@
+"use client";
+
 import { featuredDeals } from "@/lib/data";
 import ProductCard from "@/components/product/ProductCard";
 import SectionHeader from "@/components/ui/SectionHeader";

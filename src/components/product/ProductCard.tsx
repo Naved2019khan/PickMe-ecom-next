@@ -8,6 +8,7 @@ import { formatINR } from "@/lib/utils";
 import {
   useAppDispatch, useAppSelector,
   addToCart, increment, decrement, selectItemQty,
+  toggleWishlistItemAsync, selectIsWishlisted,
 } from "@/store";
 
 interface ProductCardProps {
@@ -16,8 +17,9 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, className = "" }: ProductCardProps) {
-  const dispatch = useAppDispatch();
-  const qty      = useAppSelector(selectItemQty(product.id));
+  const dispatch    = useAppDispatch();
+  const qty         = useAppSelector(selectItemQty(product.id));
+  const isWishlisted = useAppSelector(selectIsWishlisted(product.id));
 
   function handleAdd(e: React.MouseEvent) {
     e.preventDefault();
@@ -88,7 +90,7 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
             top: 10, right: 10,
             width: 30, height: 30,
             borderRadius: "50%",
-            background: "rgba(255,255,255,0.85)",
+            background: isWishlisted ? "rgba(244,63,94,0.12)" : "rgba(255,255,255,0.85)",
             border: "none",
             display: "flex",
             alignItems: "center",
@@ -97,17 +99,36 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
             backdropFilter: "blur(6px)",
             WebkitBackdropFilter: "blur(6px)",
             boxShadow: "var(--shadow-xs)",
-            opacity: 0,
-            transition: "opacity var(--transition-base), transform var(--transition-bounce)",
+            opacity: isWishlisted ? 1 : 0,
+            transition: "opacity var(--transition-base), transform var(--transition-bounce), background 0.2s",
             zIndex: 2,
           }}
           className="group-hover:!opacity-100"
           onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "scale(1.12)"; }}
           onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "scale(1)"; }}
-          onClick={e => { e.preventDefault(); e.stopPropagation(); }}
-          aria-label="Wishlist"
+          onClick={e => {
+            e.preventDefault();
+            e.stopPropagation();
+            dispatch(toggleWishlistItemAsync({
+              id:       product.id,
+              name:     product.name,
+              image:    product.image,
+              price:    product.price,
+              mrp:      product.mrp,
+              discount: product.discount,
+            }));
+          }}
+          aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
         >
-          <Heart size={13} strokeWidth={2} style={{ color: "var(--color-accent)" }} />
+          <Heart
+            size={13}
+            strokeWidth={2}
+            style={{
+              color: isWishlisted ? "#f43f5e" : "var(--color-accent)",
+              fill: isWishlisted ? "#f43f5e" : "none",
+              transition: "color 0.2s, fill 0.2s",
+            }}
+          />
         </button>
 
         {/* Discount badge */}
