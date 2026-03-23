@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import ReduxProvider from "@/components/providers/ReduxProvider";
+import CartDrawer from "@/components/ui/CartDrawer";
+import AuthDrawer from "@/components/ui/AuthDrawer";
+import LocationDrawer from "@/components/ui/LocationDrawer";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 const inter = Inter({
   subsets:  ["latin"],
@@ -25,7 +31,16 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${inter.variable} ${plusJakarta.variable}`}>
-      <body>{children}</body>
+      <body>
+        <ReduxProvider>
+          <Header />
+          {children}
+          <Footer />
+          <CartDrawer />
+          <AuthDrawer />
+          <LocationDrawer />
+        </ReduxProvider>
+      </body>
     </html>
   );
 }

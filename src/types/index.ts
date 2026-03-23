@@ -5,11 +5,13 @@ export interface Product {
   image:     string;
   price:     number;
   mrp:       number;
+  description:string;
   discount:  number; // percentage
   badge?:    string;
   rating?:   number;
   reviews?:  number;
   tag?:      string; // e.g. "New", "Trending"
+  imageBg?:  string; // Dynamic card background
 }
 
 /* ─── Category ─────────────────────────────────────────────────── */
