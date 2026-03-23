@@ -8,14 +8,10 @@ import {
   User,
   Menu,
   X,
-  SlidersHorizontal,
   MapPin,
   ChevronDown,
   Bell,
   Heart,
-  Tag,
-  Truck,
-  Flame,
   Zap,
 } from "lucide-react";
 
@@ -29,7 +25,6 @@ const NAV_CATEGORIES = [
   { label: "Sports", emoji: "⚽" },
 ];
 
-const TRENDING = ["Mango", "Sunscreen", "Air Fryer", "Summer Dress"];
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);

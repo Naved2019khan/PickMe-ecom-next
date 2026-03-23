@@ -10,8 +10,11 @@ export const heroSlides: HeroSlide[] = [
     cta:      "Shop Now",
     ctaHref:  "/electronics/wearables",
     image:    "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80",
-    bg:       "linear-gradient(135deg, #0f1f3d 0%, #162544 60%, #1a3a6e 100%)",
+
+    // 💎 Premium deep blue + indigo
+   bg: "linear-gradient(135deg, #1a0a0a 0%, #7f1d1d 50%, #ef4444 100%)",
   },
+
   {
     id:       "slide-2",
     tagline:  "Mega Savings on Latest Smartphones",
@@ -20,8 +23,11 @@ export const heroSlides: HeroSlide[] = [
     cta:      "Explore Now",
     ctaHref:  "/electronics/phones",
     image:    "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&q=80",
-    bg:       "linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%)",
+
+    // 💎 Dark + subtle neon blue glow
+    bg: "linear-gradient(135deg, #020617 0%, #0f172a 50%, #0ea5e9 100%)",
   },
+
   {
     id:       "slide-3",
     tagline:  "Fresh Fashion Every Week",
@@ -30,7 +36,9 @@ export const heroSlides: HeroSlide[] = [
     cta:      "Shop Fashion",
     ctaHref:  "/fashion",
     image:    "https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&q=80",
-    bg:       "linear-gradient(135deg, #1f0a2e 0%, #2d1444 60%, #4a1a6e 100%)",
+
+    // 💎 Purple luxury gradient
+    bg: "linear-gradient(135deg, #0f0a1f 0%, #2e1065 50%, #7c3aed 100%)",
   },
 ];
 
@@ -170,38 +178,69 @@ export const navCategories: NavCategory[] = [
 /* ─── Featured products (deals) ───────────────────────────────── */
 export const featuredDeals: Product[] = [
   {
-    id:       "fd-1",
-    name:     "Noise ColorFit Pro 4 Alpha",
-    image:    "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&q=80",
-    price:    2499,
-    mrp:      7999,
-    discount: 69,
-    tag:      "Deal of the Day",
+    id:          "fd-1",
+    name:        "Noise ColorFit Pro 4 Alpha",
+    description: "Always-on AMOLED display, 100+ sport modes, SpO2 & stress monitor.",
+    image:       "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&q=80",
+    imageBg:     "linear-gradient(140deg, #e0f2fe 0%, #bae6fd 100%)",   // sky blue
+    price:       2499,
+    mrp:         7999,
+    discount:    69,
+    tag:         "Deal of the Day",
   },
   {
-    id:       "fd-2",
-    name:     "boAt Rockerz 450 Wireless",
-    image:    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&q=80",
-    price:    999,
-    mrp:      3490,
-    discount: 71,
-    tag:      "Hot Deal",
+    id:          "fd-2",
+    name:        "boAt Rockerz 450 Wireless",
+    description: "40mm drivers, 15-hr playback, plush ear cushions for all-day comfort.",
+    image:       "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&q=80",
+    imageBg:     "linear-gradient(140deg, #fce7f3 0%, #fbcfe8 100%)",   // rose pink
+    price:       999,
+    mrp:         3490,
+    discount:    71,
+    tag:         "Hot Deal",
   },
   {
-    id:       "fd-3",
-    name:     "JBL Flip 6 Bluetooth Speaker",
-    image:    "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=300&q=80",
-    price:    8499,
-    mrp:      11999,
-    discount: 29,
+    id:          "fd-3",
+    name:        "JBL Flip 6 Bluetooth Speaker",
+    description: "IP67 waterproof, bold JBL Original Pro Sound, 12-hr battery.",
+    image:       "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=300&q=80",
+    imageBg:     "linear-gradient(140deg, #dcfce7 0%, #bbf7d0 100%)",   // mint green
+    price:       8499,
+    mrp:         11999,
+    discount:    29,
   },
   {
-    id:       "fd-4",
-    name:     "Sony WH-1000XM5",
-    image:    "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=300&q=80",
-    price:    22990,
-    mrp:      29990,
-    discount: 23,
-    tag:      "Premium",
+    id:          "fd-4",
+    name:        "Sony WH-1000XM5",
+    description: "Industry-leading ANC, 30-hr battery, Multipoint Bluetooth connection.",
+    image:       "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=300&q=80",
+    imageBg:     "linear-gradient(140deg, #fef9c3 0%, #fde68a 100%)",   // warm amber
+    price:       22990,
+    mrp:         29990,
+    discount:    23,
+    tag:         "Premium",
+  },
+  {
+    id:          "fd-5",
+    name:        "Sony WH-1000XM5",
+    description: "Industry-leading ANC, 30-hr battery, Multipoint Bluetooth connection.",
+    image:       "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=300&q=80",
+    imageBg:     "linear-gradient(140deg, #fef9c3 0%, #fde68a 100%)",   // warm amber
+    price:       22990,
+    mrp:         29990,
+    discount:    23,
+    tag:         "Premium",
+  },
+  {
+    id:          "fd-6",
+    name:        "Sony WH-1000XM5",
+    description: "Industry-leading ANC, 30-hr battery, Multipoint Bluetooth connection.",
+    image:       "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=300&q=80",
+    imageBg:     "linear-gradient(140deg, #fef9c3 0%, #fde68a 100%)",   // warm amber
+    price:       22990,
+    mrp:         29990,
+    discount:    23,
+    tag:         "Premium",
   },
 ];
+

@@ -5,6 +5,7 @@ export interface Product {
   image:     string;
   price:     number;
   mrp:       number;
+  description:string;
   discount:  number; // percentage
   badge?:    string;
   rating?:   number;
