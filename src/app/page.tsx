@@ -1,6 +1,4 @@
 import AnnouncementBar  from "@/components/layout/AnnouncementBar";
-import Header           from "@/components/layout/Header";
-import Footer           from "@/components/layout/Footer";
 import HeroBanner       from "@/components/sections/HeroBanner";
 import TopBrands        from "@/components/sections/TopBrands";
 import FeaturedDeals    from "@/components/sections/FeaturedDeals";
@@ -11,7 +9,6 @@ export default function HomePage() {
     <>
       {/* ── Global chrome ── */}
       <AnnouncementBar />
-      <Header />
       {/* <CategoryNav /> */}
 
       {/* ── Page content ── */}
@@ -23,8 +20,6 @@ export default function HomePage() {
         <TopBrands />
         <FeaturedDeals />
       </main>
-
-      <Footer />
     </>
   );
 }

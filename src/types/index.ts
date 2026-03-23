@@ -11,6 +11,7 @@ export interface Product {
   rating?:   number;
   reviews?:  number;
   tag?:      string; // e.g. "New", "Trending"
+  imageBg?:  string; // Dynamic card background
 }
 
 /* ─── Category ─────────────────────────────────────────────────── */
