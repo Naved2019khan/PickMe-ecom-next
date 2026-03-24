@@ -30,7 +30,7 @@ export default function CartDrawer() {
     if (isAuth) {
       router.push("/checkout");
     } else {
-      dispatch(openAuthDrawer("signin"));
+      dispatch(openAuthDrawer({ view: "signin", redirectUrl: "/checkout" }));
     }
   };
 

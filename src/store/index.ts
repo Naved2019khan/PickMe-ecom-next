@@ -12,7 +12,7 @@ export type { CartItem } from "./cartSlice";
 
 export {
   setUser, logout, openAuthDrawer, closeAuthDrawer, setAuthView,
-  selectUser, selectIsAuthenticated, selectIsAuthDrawerOpen, selectAuthView
+  selectUser, selectIsAuthenticated, selectIsAuthDrawerOpen, selectAuthView, selectRedirectUrl
 } from "./authSlice";
 
 export {

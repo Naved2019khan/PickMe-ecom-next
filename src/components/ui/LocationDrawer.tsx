@@ -16,7 +16,6 @@ export default function LocationDrawer() {
   const isOpen = useAppSelector(selectIsLocationDrawerOpen);
   const location = useAppSelector(selectLocationDetails);
   
-  const [address, setAddress] = useState(location.address);
   const [city, setCity] = useState(location.city);
   const [stateName, setStateName] = useState(location.state);
   const [country, setCountry] = useState(location.country);
@@ -29,7 +28,6 @@ export default function LocationDrawer() {
   // Sync when opened
   useEffect(() => {
     if (isOpen) {
-      setAddress(location.address);
       setCity(location.city);
       setStateName(location.state);
       setCountry(location.country);
@@ -85,7 +83,7 @@ export default function LocationDrawer() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    dispatch(setLocationDetails({ address, city, state: stateName, country, pin, lat, lng }));
+    dispatch(setLocationDetails({ city, state: stateName, country, pin, lat, lng }));
     dispatch(closeLocationDrawer());
   };
 
@@ -110,7 +108,7 @@ export default function LocationDrawer() {
       >
         <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100/80 sticky top-0 bg-white/90 backdrop-blur-md z-20">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-200">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-orange-500 to-rose-500 flex items-center justify-center shadow-lg shadow-orange-200">
               <MapPin size={18} className="text-white" strokeWidth={2.5} />
             </div>
             <div>
@@ -135,7 +133,7 @@ export default function LocationDrawer() {
                 type="button" 
                 onClick={handleDetectLocation}
                 disabled={loadingGeo}
-                className="flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full transition-colors disabled:opacity-50"
+                className="flex items-center gap-1.5 text-xs font-bold text-orange-600 hover:text-orange-700 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded-full transition-colors disabled:opacity-50"
               >
                 {loadingGeo ? <Loader2 size={14} className="animate-spin" /> : <Navigation size={14} />}
                 {loadingGeo ? "Detecting..." : "Detect Me"}
@@ -148,16 +146,7 @@ export default function LocationDrawer() {
           </div>
 
           <form id="location-form" onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Address Line</label>
-              <input
-                type="text"
-                value={address}
-                onChange={e => setAddress(e.target.value)}
-                placeholder="House no, Building, Street"
-                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-sm font-semibold text-gray-900"
-              />
-            </div>
+            {/* Address line removed per user request */}
             
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
@@ -167,7 +156,7 @@ export default function LocationDrawer() {
                   required
                   value={city}
                   onChange={e => setCity(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-sm font-semibold text-gray-900"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-sm font-semibold text-gray-900"
                 />
               </div>
               <div className="space-y-1">
@@ -177,7 +166,7 @@ export default function LocationDrawer() {
                   required
                   value={pin}
                   onChange={e => setPin(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-sm font-semibold text-gray-900"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-sm font-semibold text-gray-900"
                 />
               </div>
             </div>
@@ -190,7 +179,7 @@ export default function LocationDrawer() {
                   required
                   value={stateName}
                   onChange={e => setStateName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-sm font-semibold text-gray-900"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-sm font-semibold text-gray-900"
                 />
               </div>
               <div className="space-y-1">
@@ -200,7 +189,7 @@ export default function LocationDrawer() {
                   required
                   value={country}
                   onChange={e => setCountry(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-sm font-semibold text-gray-900"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-sm font-semibold text-gray-900"
                 />
               </div>
             </div>
@@ -211,7 +200,7 @@ export default function LocationDrawer() {
           <button
             type="submit"
             form="location-form"
-            className="w-full flex items-center justify-center py-4 bg-gray-900 text-white font-black text-[15px] rounded-2xl shadow-xl hover:bg-gray-800 active:scale-[0.98] transition-all"
+            className="w-full flex items-center justify-center py-4 bg-gradient-to-r from-orange-500 to-rose-500 text-white font-black text-[15px] rounded-2xl shadow-xl shadow-orange-200 hover:brightness-105 active:scale-[0.98] transition-all"
           >
             Confirm Location
           </button>

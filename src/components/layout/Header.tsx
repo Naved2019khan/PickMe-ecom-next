@@ -73,7 +73,7 @@ export default function Header() {
             {/* ── Delivery Location ── */}
             <button 
               onClick={() => dispatch(openLocationDrawer())}
-              className="hidden lg:flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-orange-50 transition-colors border border-transparent hover:border-orange-100 group shrink-0"
+              className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-orange-50 transition-colors border border-transparent hover:border-orange-100 group shrink-0"
             >
               <MapPin size={16} className="text-orange-500 shrink-0" />
               <div className="text-left leading-tight">
@@ -110,7 +110,7 @@ export default function Header() {
                   if (isAuthenticated) {
                     dispatch(openAuthDrawer());
                   } else {
-                    dispatch(openAuthDrawer('signin'));
+                    dispatch(openAuthDrawer({ view: 'signin' }));
                   }
                 }}
                 className="hidden md:flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-orange-50 transition-colors border border-gray-100 hover:border-orange-200 group cursor-pointer"
@@ -165,13 +165,22 @@ export default function Header() {
         {menuOpen && (
           <div className="lg:hidden border-t border-gray-100 bg-white px-4 py-3 space-y-1 shadow-lg">
             {/* Location on mobile */}
-            <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-orange-50 border border-orange-100 mb-3">
-              <MapPin size={15} className="text-orange-500" />
-              <div>
-                <p className="text-[10px] text-gray-400">Delivering to</p>
-                <p className="text-sm font-bold text-gray-800">Greater Noida</p>
+            <button 
+              onClick={() => {
+                dispatch(openLocationDrawer());
+                setMenuOpen(false);
+              }}
+              className="w-full flex items-center gap-2 px-4 py-3 rounded-2xl bg-gradient-to-r from-orange-50 to-white border border-orange-100 mb-4 text-left shadow-sm active:scale-[0.98] transition-all"
+            >
+              <div className="w-9 h-9 rounded-xl bg-white border border-orange-100 flex items-center justify-center shadow-sm">
+                <MapPin size={16} className="text-orange-500" />
               </div>
-            </div>
+              <div className="flex-1">
+                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Delivering to</p>
+                <p className="text-sm font-black text-gray-900 line-clamp-1">{location.city || "Select City"}</p>
+              </div>
+              <ChevronDown size={14} className="text-orange-400 mr-1" />
+            </button>
             {NAV_CATEGORIES.map((cat) => (
               <Link
                 key={cat.label}

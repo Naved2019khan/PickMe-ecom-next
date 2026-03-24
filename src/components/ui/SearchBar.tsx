@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, FormEvent } from "react";
 import { Search, X, TrendingUp, ArrowUpRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { smartphones, featuredDeals, topCategories } from "@/lib/data";
 import type { Product, Category } from "@/types";
 
@@ -70,6 +71,7 @@ export default function SearchBar() {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
+  const router = useRouter();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -136,12 +138,22 @@ export default function SearchBar() {
     setOpen(false);
     setActiveIndex(-1);
     inputRef.current?.blur();
+    router.push(`/search?q=${encodeURIComponent(item.label)}`);
+  }
+
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    if (!query.trim()) return;
+    setOpen(false);
+    inputRef.current?.blur();
+    router.push(`/search?q=${encodeURIComponent(query.trim())}`);
   }
 
   return (
     <div ref={containerRef} className="flex-1 relative max-w-2xl">
       {/* ── Input wrapper ── */}
-      <div
+      <form
+        onSubmit={handleSubmit}
         className={[
           "flex items-center rounded-2xl overflow-visible transition-all duration-200",
           dropdownVisible
@@ -200,7 +212,7 @@ export default function SearchBar() {
         >
           Search
         </button>
-      </div>
+      </form>
 
       {/* ── Dropdown ── */}
       {dropdownVisible && (

@@ -6,8 +6,10 @@ import CartDrawer from "@/components/ui/CartDrawer";
 import AuthDrawer from "@/components/ui/AuthDrawer";
 import LocationDrawer from "@/components/ui/LocationDrawer";
 import WishlistDrawer from "@/components/ui/WishlistDrawer";
+import MobileCheckoutBar from "@/components/ui/MobileCheckoutBar";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import LocationInitializer from "@/components/location/LocationInitializer";
 
 const inter = Inter({
   subsets:  ["latin"],
@@ -41,6 +43,8 @@ export default function RootLayout({
           <AuthDrawer />
           <LocationDrawer />
           <WishlistDrawer />
+          <MobileCheckoutBar />
+          <LocationInitializer />
         </ReduxProvider>
       </body>
     </html>

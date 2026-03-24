@@ -7,6 +7,7 @@ interface AuthState {
   isAuthenticated: boolean;
   isDrawerOpen: boolean;
   authView: 'signin' | 'signup';
+  redirectUrl: string | null;
 }
 
 const initialState: AuthState = {
@@ -14,6 +15,7 @@ const initialState: AuthState = {
   isAuthenticated: false,
   isDrawerOpen: false,
   authView: 'signin',
+  redirectUrl: null,
 };
 
 const authSlice = createSlice({
@@ -28,14 +30,18 @@ const authSlice = createSlice({
       state.user = null;
       state.isAuthenticated = false;
     },
-    openAuthDrawer: (state, action: PayloadAction<'signin' | 'signup' | undefined>) => {
+    openAuthDrawer: (state, action: PayloadAction<{ view?: 'signin' | 'signup', redirectUrl?: string } | undefined>) => {
       state.isDrawerOpen = true;
-      if (action.payload) {
-        state.authView = action.payload;
+      if (action.payload?.view) {
+        state.authView = action.payload.view;
+      }
+      if (action.payload?.redirectUrl) {
+        state.redirectUrl = action.payload.redirectUrl;
       }
     },
     closeAuthDrawer: (state) => {
       state.isDrawerOpen = false;
+      state.redirectUrl = null;
     },
     setAuthView: (state, action: PayloadAction<'signin' | 'signup'>) => {
       state.authView = action.payload;
@@ -49,5 +55,6 @@ export const selectUser = (state: RootState) => state.auth.user;
 export const selectIsAuthenticated = (state: RootState) => state.auth.isAuthenticated;
 export const selectIsAuthDrawerOpen = (state: RootState) => state.auth.isDrawerOpen;
 export const selectAuthView = (state: RootState) => state.auth.authView;
+export const selectRedirectUrl = (state: RootState) => state.auth.redirectUrl;
 
 export default authSlice.reducer;

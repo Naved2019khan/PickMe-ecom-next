@@ -14,9 +14,10 @@ import {
 interface ProductCardProps {
   product:    Product;
   className?: string;
+  width?:     number | string;
 }
 
-export default function ProductCard({ product, className = "" }: ProductCardProps) {
+export default function ProductCard({ product, className = "", width }: ProductCardProps) {
   const dispatch    = useAppDispatch();
   const qty         = useAppSelector(selectItemQty(product.id));
   const isWishlisted = useAppSelector(selectIsWishlisted(product.id));
@@ -59,6 +60,8 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
         textDecoration: "none",
         display: "flex",
         flexDirection: "column",
+        width: width,
+        minWidth: width,
       }}
       onMouseEnter={e => {
         const el = e.currentTarget as HTMLElement;
@@ -76,7 +79,7 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
       <div
         style={{
           position: "relative",
-          background: product.imageBg ?? "var(--color-primary-light)",
+          background: product.imageBg ?? "bg-white",
           padding: "16px 14px 28px",
           display: "flex",
           alignItems: "center",
@@ -269,107 +272,36 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
             /* Add button */
             <button
               onClick={handleAdd}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 5,
-                background: "var(--gradient-brand)",
-                color: "#fff",
-                border: "none",
-                borderRadius: 10,
-                padding: "9px 11px",
-                fontSize: 11,
-                fontWeight: 700,
-                fontFamily: "var(--font-sans)",
-                cursor: "pointer",
-                boxShadow: "var(--shadow-primary)",
-                whiteSpace: "nowrap",
-                flexShrink: 0,
-                transition: "filter var(--transition-fast), transform var(--transition-bounce)",
-              }}
-              onMouseEnter={e => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.filter = "brightness(1.08)";
-                el.style.transform = "scale(1.06)";
-              }}
-              onMouseLeave={e => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.filter = "none";
-                el.style.transform = "scale(1)";
-              }}
+              className="flex items-center gap-1.5 bg-gradient-to-r from-orange-500 to-rose-500 text-white border-none rounded-xl px-3 py-2 text-[11px] font-black cursor-pointer shadow-md shadow-orange-200 hover:brightness-105 hover:-translate-y-0.5 active:translate-y-0 transition-all whitespace-nowrap shrink-0"
               aria-label="Add to cart"
             >
-              <ShoppingCart size={11} strokeWidth={2.5} />
+              <ShoppingCart size={12} strokeWidth={2.5} />
               Add
             </button>
           ) : (
             /* Stepper */
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                borderRadius: 10,
-                overflow: "hidden",
-                border: "1.5px solid var(--color-primary)",
-                flexShrink: 0,
-              }}
+            <div 
+              className="flex items-center bg-gray-50 border border-gray-200 rounded-xl p-1 shadow-inner shrink-0 cursor-default"
+              onClick={e => { e.preventDefault(); e.stopPropagation(); }}
             >
               <button
                 onClick={handleDec}
                 aria-label="Decrease"
-                style={{
-                  width: 28, height: 28,
-                  border: "none",
-                  background: "var(--color-primary-light)",
-                  color: "var(--color-primary)",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontFamily: "var(--font-sans)",
-                  transition: "background var(--transition-fast)",
-                }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "var(--color-primary-border)"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "var(--color-primary-light)"; }}
+                className="w-7 h-7 flex items-center justify-center bg-white rounded-lg shadow-sm text-gray-400 hover:text-orange-500 transition-colors cursor-pointer border-none"
               >
-                <Minus size={11} strokeWidth={2.5} />
+                <Minus size={12} strokeWidth={2.5} />
               </button>
-
-              <span
-                style={{
-                  width: 26, height: 28,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: 12,
-                  fontWeight: 800,
-                  color: "var(--color-text-primary)",
-                  background: "var(--color-primary-light)",
-                  fontFamily: "var(--font-sans)",
-                }}
-              >
+              
+              <span className="w-7 h-7 flex items-center justify-center text-[13px] font-black text-gray-900 border-none">
                 {qty}
               </span>
-
+              
               <button
                 onClick={handleInc}
                 aria-label="Increase"
-                style={{
-                  width: 28, height: 28,
-                  border: "none",
-                  background: "var(--gradient-brand)",
-                  color: "#fff",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontFamily: "var(--font-sans)",
-                  transition: "filter var(--transition-fast)",
-                }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.filter = "brightness(1.1)"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.filter = "none"; }}
+                className="w-7 h-7 flex items-center justify-center bg-white rounded-lg shadow-sm text-gray-400 hover:text-orange-500 transition-colors cursor-pointer border-none"
               >
-                <Plus size={11} strokeWidth={2.5} />
+                <Plus size={12} strokeWidth={2.5} />
               </button>
             </div>
           )}

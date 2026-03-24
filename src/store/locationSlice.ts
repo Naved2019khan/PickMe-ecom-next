@@ -3,7 +3,6 @@ import type { RootState } from './store';
 
 export interface LocationState {
   isDrawerOpen: boolean;
-  address: string;
   city: string;
   state: string;
   country: string;
@@ -14,7 +13,6 @@ export interface LocationState {
 
 const initialState: LocationState = {
   isDrawerOpen: false,
-  address: '',
   city: 'Bangalore', // Default city
   state: 'Karnataka',
   country: 'India',
@@ -33,9 +31,8 @@ const locationSlice = createSlice({
     closeLocationDrawer: (state) => {
       state.isDrawerOpen = false;
     },
-    setLocationDetails: (state, action: PayloadAction<Partial<LocationState>>) => {
+    setLocationDetails: (state, action: PayloadAction<Partial<Omit<LocationState, 'isDrawerOpen'>>>) => {
       // Merge partial state selectively
-      if (action.payload.address !== undefined) state.address = action.payload.address;
       if (action.payload.city !== undefined) state.city = action.payload.city;
       if (action.payload.state !== undefined) state.state = action.payload.state;
       if (action.payload.country !== undefined) state.country = action.payload.country;

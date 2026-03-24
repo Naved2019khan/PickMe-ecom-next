@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState, FormEvent } from "react";
-import { X, User as UserIcon, Mail, Phone, Lock, ChevronRight, CheckCircle2 } from "lucide-react";
+import { X, User as UserIcon, Mail, Phone, Lock, ChevronRight, CheckCircle2, Package } from "lucide-react";
 import {
   useAppDispatch, useAppSelector,
-  selectIsAuthDrawerOpen, selectAuthView, selectIsAuthenticated, selectUser,
+  selectIsAuthDrawerOpen, selectAuthView, selectIsAuthenticated, selectUser, selectRedirectUrl,
   closeAuthDrawer, setAuthView, setUser, logout, closeDrawer as closeCartDrawer
 } from "@/store";
 import { loginApi, signupApi } from "@/lib/api/auth";
@@ -18,6 +18,7 @@ export default function AuthDrawer() {
   const view = useAppSelector(selectAuthView);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const user = useAppSelector(selectUser);
+  const redirectUrl = useAppSelector(selectRedirectUrl);
 
   const overlayRef = useRef<HTMLDivElement>(null);
 
@@ -70,8 +71,10 @@ export default function AuthDrawer() {
       
       dispatch(setUser(loggedInUser));
       dispatch(closeAuthDrawer());
-      // Optionally route them to checkout automatically:
-      // router.push("/checkout");
+      
+      if (redirectUrl) {
+        router.push(redirectUrl);
+      }
 
     } catch (err: any) {
       setError(err.message || "An error occurred");
@@ -151,14 +154,30 @@ export default function AuthDrawer() {
                   <p className="text-xs font-bold text-gray-400 mt-0.5 bg-gray-100 px-3 py-1 rounded-full inline-block tracking-wide uppercase">Logged In</p>
                 </div>
                 
-                <div className="w-full h-px bg-gray-100 my-4" />
+                <div className="w-full h-px bg-gray-100 my-2" />
                 
-                <button
-                  onClick={() => dispatch(logout())}
-                  className="w-full flex items-center justify-center gap-2 py-3.5 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-500 font-bold text-sm rounded-2xl transition-all"
-                >
-                  Sign Out
-                </button>
+                <div className="w-full flex flex-col gap-2">
+                  <button
+                    onClick={() => {
+                      router.push("/orders");
+                      dispatch(closeAuthDrawer());
+                    }}
+                    className="w-full flex items-center justify-between px-5 py-4 bg-orange-50 hover:bg-orange-100 text-orange-600 font-bold text-sm rounded-2xl transition-all group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Package size={18} />
+                      My Orders
+                    </div>
+                    <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                  </button>
+
+                  <button
+                    onClick={() => dispatch(logout())}
+                    className="w-full flex items-center justify-center gap-2 py-3.5 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-500 font-bold text-sm rounded-2xl transition-all"
+                  >
+                    Sign Out
+                  </button>
+                </div>
              </div>
           ) : (
              <form onSubmit={handleSubmit} className="flex flex-col gap-4 fade-in animate-in duration-300">

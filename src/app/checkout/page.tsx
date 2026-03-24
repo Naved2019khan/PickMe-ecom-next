@@ -3,10 +3,11 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   useAppDispatch, useAppSelector,
   selectCartItems, selectCartTotals,
-  selectAddresses, addAddress, updateAddress,
+  selectAddresses, addAddress, updateAddress, clearCart
 } from "@/store";
 import type { Address } from "@/store";
 import { formatINR } from "@/lib/utils";
@@ -29,6 +30,7 @@ const TYPE_ICONS: Record<Address["type"], typeof Home> = {
 
 export default function CheckoutPage() {
   const dispatch = useAppDispatch();
+  const router   = useRouter();
   const items    = useAppSelector(selectCartItems);
   const totals   = useAppSelector(selectCartTotals);
   const addresses = useAppSelector(selectAddresses);
@@ -40,6 +42,7 @@ export default function CheckoutPage() {
   // Address form state
   const [showForm, setShowForm]         = useState(false);
   const [editingAddr, setEditingAddr]   = useState<Address | undefined>(undefined);
+  const [isPlacing, setIsPlacing]       = useState(false);
 
   /* ── Handlers ── */
   function handleAddNew() {
@@ -65,6 +68,22 @@ export default function CheckoutPage() {
   function handleCancel() {
     setShowForm(false);
     setEditingAddr(undefined);
+  }
+
+  async function handlePlaceOrder() {
+    setIsPlacing(true);
+    // Simulate a secure payment API handshake
+    await new Promise(res => setTimeout(res, 2000));
+    
+    // 85% success rate for demonstration purposes
+    const isSuccess = Math.random() > 0.15;
+    
+    if (isSuccess) {
+      dispatch(clearCart());
+      router.push("/checkout/success");
+    } else {
+      router.push("/checkout/failure");
+    }
   }
 
   /* ── Empty cart ── */
@@ -281,8 +300,12 @@ export default function CheckoutPage() {
             {step === "confirm" && (
               <div className="px-6 pb-6 pt-2 animate-in fade-in duration-300">
                 <p className="text-sm text-green-700 font-medium mb-4">Everything looks good! Review your order summary on the right and place your order.</p>
-                <button className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-rose-500 hover:brightness-105 text-white py-3.5 px-8 rounded-xl font-black text-[15px] transition-all duration-200 active:scale-95 shadow-[0_8px_24px_rgba(239,68,68,0.35)]">
-                  Place Order — {formatINR(totals.total)}
+                <button 
+                  onClick={handlePlaceOrder}
+                  disabled={isPlacing}
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-rose-500 hover:brightness-105 text-white py-3.5 px-8 rounded-xl font-black text-[15px] transition-all duration-200 active:scale-95 shadow-[0_8px_24px_rgba(239,68,68,0.35)] disabled:opacity-70 disabled:pointer-events-none"
+                >
+                  {isPlacing ? "Processing Payment..." : `Place Order — ${formatINR(totals.total)}`}
                 </button>
               </div>
             )}
