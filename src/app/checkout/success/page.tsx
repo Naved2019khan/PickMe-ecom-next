@@ -10,18 +10,18 @@ export default function CheckoutSuccessPage() {
 
   useEffect(() => {
     const id = "ORD-" + Math.random().toString(36).substr(2, 9).toUpperCase();
-    
+
     // Future date format for delivery computation
     const d = new Date();
     d.setDate(d.getDate() + 3);
     const dateStr = d.toLocaleDateString("en-US", { weekday: 'short', month: 'short', day: 'numeric' });
 
-    setOrderDetails({ id, amount: 2499, date: dateStr }); 
+    setOrderDetails({ id, amount: 2499, date: dateStr });
   }, []);
 
   return (
     <main className="min-h-[85vh] flex flex-col items-center justify-center py-12 px-4 bg-gray-50/50 relative overflow-hidden">
-      
+
       {/* Premium Theme Background Glow */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
         <div className="w-[600px] h-[600px] bg-gradient-to-r from-orange-300 to-rose-300 blur-[130px] rounded-full absolute -top-10" />
@@ -29,7 +29,7 @@ export default function CheckoutSuccessPage() {
 
       {/* The Celebration Popup Card */}
       <div className="bg-white border border-orange-100 p-8 sm:p-10 rounded-[40px] shadow-[0_20px_60px_-15px_rgba(249,115,22,0.15)] flex flex-col items-center max-w-sm w-full relative z-10 animate-scale-up text-center">
-        
+
         {/* Confetti / Success Lottie - Smaller & Themed */}
         <div className="w-24 h-24 mb-4 relative flex items-center justify-center">
           <div className="absolute inset-0 bg-orange-100 rounded-full scale-75 blur-2xl"></div>
@@ -80,7 +80,7 @@ export default function CheckoutSuccessPage() {
           View My Orders
           <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
         </Link>
-        
+
         <Link href="/" className="mt-5 text-[13px] font-bold text-gray-400 hover:text-orange-500 underline underline-offset-4 decoration-2 decoration-gray-200 hover:decoration-orange-200 transition-colors">
           Continue Shopping
         </Link>

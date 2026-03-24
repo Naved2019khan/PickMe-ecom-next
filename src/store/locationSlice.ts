@@ -13,12 +13,12 @@ export interface LocationState {
 
 const initialState: LocationState = {
   isDrawerOpen: false,
-  city: 'Bangalore', // Default city
-  state: 'Karnataka',
+  city: '',
+  state: '',
   country: 'India',
-  pin: '560001',
-  lat: 12.9716, // Default to Bangalore
-  lng: 77.5946,
+  pin: '',
+  lat: null,
+  lng: null,
 };
 
 const locationSlice = createSlice({

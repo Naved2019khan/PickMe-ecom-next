@@ -105,10 +105,10 @@ export default function SearchBar() {
 
   const listItems: SearchResult[] = showTrending
     ? TRENDING_SEARCHES.map((t, i) => ({
-        type: "trending",
-        id: `trend-${i}`,
-        label: t,
-      }))
+      type: "trending",
+      id: `trend-${i}`,
+      label: t,
+    }))
     : results;
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -150,15 +150,22 @@ export default function SearchBar() {
   }
 
   return (
-    <div ref={containerRef} className="flex-1 relative max-w-2xl">
+    <div ref={containerRef} className="flex-1 w-full relative max-w-2xl mx-auto group z-50">
+      
+      {/* Gradient glow shadow for input */}
+      <div className={[
+        "absolute -inset-[3px] bg-gradient-to-r from-orange-400 via-rose-400 to-orange-400 blur-md transition-all duration-300 rounded-2xl pointer-events-none",
+        dropdownVisible ? "opacity-100 rounded-b-none blur-lg" : "opacity-30 group-hover:opacity-75 focus-within:opacity-100"
+      ].join(" ")}></div>
+
       {/* ── Input wrapper ── */}
       <form
         onSubmit={handleSubmit}
         className={[
-          "flex items-center rounded-2xl overflow-visible transition-all duration-200",
+          "relative z-[60] flex items-center rounded-2xl overflow-visible transition-all duration-300",
           dropdownVisible
-            ? "bg-white shadow-lg shadow-gray-200/80 rounded-b-none"
-            : "bg-gray-100 hover:bg-gray-50 focus-within:bg-white focus-within:shadow-lg focus-within:shadow-gray-200/80",
+            ? "bg-white rounded-b-none"
+            : "bg-white hover:bg-white focus-within:bg-white",
         ].join(" ")}
       >
         <Search
@@ -189,7 +196,7 @@ export default function SearchBar() {
           }}
           onFocus={() => setOpen(true)}
           onKeyDown={handleKeyDown}
-          className="flex-1 bg-transparent px-3 py-2.5 text-sm placeholder:text-gray-400 text-gray-800"
+          className="flex-1 min-w-0 w-full bg-transparent px-3 py-2.5 text-sm placeholder:text-gray-400 text-gray-800"
           style={{ border: "none", outline: "none", boxShadow: "none" }}
         />
 
@@ -208,7 +215,7 @@ export default function SearchBar() {
         {/* Search CTA */}
         <button
           aria-label="Search"
-          className="hidden sm:flex items-center gap-2 px-4 m-1.5 bg-orange-500 hover:bg-orange-600 active:scale-95 text-white text-sm font-semibold rounded-xl transition-all duration-150 py-2 shadow-sm shadow-orange-200 shrink-0"
+          className="hidden sm:flex items-center gap-2 px-6 m-1.5 bg-gradient-to-r from-orange-500 to-rose-500 hover:opacity-90 active:scale-95 text-white text-sm font-bold rounded-xl transition-all duration-150 py-2 shadow-md shadow-orange-500/30 shrink-0"
         >
           Search
         </button>
@@ -216,11 +223,16 @@ export default function SearchBar() {
 
       {/* ── Dropdown ── */}
       {dropdownVisible && (
-        <div
-          role="listbox"
-          aria-label="Search suggestions"
-          className="absolute left-0 right-0 top-full bg-white rounded-b-2xl shadow-lg shadow-gray-200/80 z-50 overflow-hidden animate-slide-down"
-        >
+        <div className="absolute left-0 right-0 top-full z-50 animate-slide-down">
+          
+          {/* Gradient glow shadow for dropdown */}
+          <div className="absolute -inset-[3px] -top-1 bg-gradient-to-r from-orange-400 via-rose-400 to-orange-400 blur-lg opacity-100 rounded-b-2xl pointer-events-none"></div>
+
+          <div
+            role="listbox"
+            aria-label="Search suggestions"
+            className="relative bg-white rounded-b-2xl overflow-hidden"
+          >
           {/* Trending section */}
           {showTrending && (
             <>
@@ -374,6 +386,7 @@ export default function SearchBar() {
             </kbd>
             <span className="text-[10px] text-gray-400">close</span>
           </div>
+        </div>
         </div>
       )}
     </div>

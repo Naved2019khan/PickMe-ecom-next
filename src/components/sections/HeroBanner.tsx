@@ -60,9 +60,9 @@ export default function HeroBanner() {
   return (
     <section className="mt-4 relative">
       <div
-        className="relative rounded-3xl"
+        className="relative rounded-3xl overflow-hidden"
         style={{
-          height:      "clamp(280px, 40vw, 420px)", /* Fixed height string for consistency */
+          height:      "clamp(280px, 60vw, 450px)",
           boxShadow:   "0 25px 60px -10px rgba(0,0,0,0.45), 0 10px 24px -6px rgba(0,0,0,0.30)",
         }}
       >
@@ -103,12 +103,12 @@ export default function HeroBanner() {
         </div>
 
         {/* ── Slide content ── */}
-        <div className="absolute inset-0 z-10 flex items-center justify-between gap-4 px-6 sm:px-10 md:px-14 pb-8">
+        <div className="absolute inset-0 z-10 flex items-center justify-between gap-4 px-6 sm:px-10 md:px-14 pb-10 sm:pb-8">
           
           {/* ── Text column (No remount, no slide animation) ── */}
           <div
-            className="flex-1 min-w-0 flex flex-col justify-center"
-            style={{ maxWidth: "clamp(200px, 45%, 480px)" }}
+            className="flex-1 w-full flex flex-col justify-center z-20"
+            style={{ maxWidth: "clamp(260px, 85%, 520px)" }}
           >
             {/* Flash badge */}
             <span
@@ -177,7 +177,7 @@ export default function HeroBanner() {
             </div>
 
             {/* Stat pills */}
-            <div className="flex items-center gap-2 mb-5">
+            <div className="flex items-center flex-wrap gap-2 mb-5">
               {meta.stats.map((s, i) => (
                 <span
                   key={i}
@@ -236,10 +236,10 @@ export default function HeroBanner() {
 
           {/* ── Image column (Does NOT remount, prevents flicker) ── */}
           <div
-            className="shrink-0 relative"
+            className="shrink-0 absolute right-[-15%] sm:right-0 sm:relative opacity-30 sm:opacity-100 z-0 pointer-events-none sm:pointer-events-auto"
             style={{
-              width:  "clamp(140px, 30vw, 300px)",
-              height: "clamp(140px, 30vw, 300px)",
+              width:  "clamp(180px, 40vw, 300px)",
+              height: "clamp(180px, 40vw, 300px)",
             }}
           >
             {/* Glowing ring behind image */}
@@ -266,7 +266,7 @@ export default function HeroBanner() {
         </div>
 
         {/* ── Bottom bar: dots + slide counter ── */}
-        <div className="absolute bottom-0 left-0 right-0 z-20 flex items-center justify-between px-6 sm:px-10 md:px-14 pb-5">
+        <div className="absolute bottom-0 left-0 right-0 z-20 flex items-center justify-between px-6 sm:px-10 md:px-14 pb-4 sm:pb-5">
           {/* Dots */}
           <div className="flex items-center gap-2">
             {heroSlides.map((_, i) => (
@@ -293,11 +293,11 @@ export default function HeroBanner() {
             {String(current + 1).padStart(2, "0")} / {String(heroSlides.length).padStart(2, "0")}
           </span>
         </div>
-
-        {/* ── Nav arrows (Positioned inside relative wrapper to break bounds safely) ── */}
-        <NavArrow direction="left"  onClick={prev} label="Previous slide" accentColor={meta.accentColor} />
-        <NavArrow direction="right" onClick={next} label="Next slide"     accentColor={meta.accentColor} />
       </div>
+
+      {/* ── Nav arrows (Positioned freely outside the overflow-hidden container) ── */}
+      <NavArrow direction="left"  onClick={prev} label="Previous slide" accentColor={meta.accentColor} />
+      <NavArrow direction="right" onClick={next} label="Next slide"     accentColor={meta.accentColor} />
     </section>
   );
 }

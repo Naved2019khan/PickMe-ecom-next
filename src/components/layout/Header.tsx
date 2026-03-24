@@ -13,12 +13,13 @@ import {
   Zap,
 } from "lucide-react";
 import SearchBar from "@/components/ui/SearchBar";
-import { 
-  useAppDispatch, useAppSelector, 
-  selectCartCount, toggleDrawer, 
+import {
+  useAppDispatch, useAppSelector,
+  selectCartCount, toggleDrawer,
   openLocationDrawer, selectLocationDetails,
   openAuthDrawer, selectIsAuthenticated, selectUser,
   openWishlistDrawer, selectWishlistCount,
+  setLocationDetails,
 } from "@/store";
 
 const NAV_CATEGORIES = [
@@ -34,12 +35,43 @@ const NAV_CATEGORIES = [
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const dispatch        = useAppDispatch();
-  const cartCount       = useAppSelector(selectCartCount);
-  const location        = useAppSelector(selectLocationDetails);
+  const [detecting, setDetecting] = useState(false);
+  const dispatch = useAppDispatch();
+  const cartCount = useAppSelector(selectCartCount);
+  const location = useAppSelector(selectLocationDetails);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
-  const user            = useAppSelector(selectUser);
-  const wishlistCount   = useAppSelector(selectWishlistCount);
+  const user = useAppSelector(selectUser);
+  const wishlistCount = useAppSelector(selectWishlistCount);
+
+  async function detectLocation() {
+    if (!navigator.geolocation) return;
+    setDetecting(true);
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        try {
+          const { latitude, longitude } = pos.coords;
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+          );
+          const data = await res.json();
+          const addr = data.address || {};
+          dispatch(setLocationDetails({
+            city:    addr.city || addr.town || addr.village || addr.county || "Your Location",
+            state:   addr.state || "",
+            country: addr.country || "India",
+            pin:     addr.postcode || "",
+            lat:     latitude,
+            lng:     longitude,
+          }));
+        } catch {
+          dispatch(setLocationDetails({ city: "Your Location" }));
+        } finally {
+          setDetecting(false);
+        }
+      },
+      () => setDetecting(false)
+    );
+  }
 
   return (
     <>
@@ -49,7 +81,7 @@ export default function Header() {
       >
         {/* ── Main Row ── */}
         <div className="container-main ">
-          <div className="flex items-center gap-4 py-3">
+          <div className="flex items-center gap-2 sm:gap-4 py-3 sm:py-4">
 
             {/* Mobile toggle */}
             <button
@@ -71,21 +103,49 @@ export default function Header() {
             </Link>
 
             {/* ── Delivery Location ── */}
-            <button 
-              onClick={() => dispatch(openLocationDrawer())}
-              className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-orange-50 transition-colors border border-transparent hover:border-orange-100 group shrink-0"
-            >
-              <MapPin size={16} className="text-orange-500 shrink-0" />
-              <div className="text-left leading-tight">
-                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wide">Deliver to</p>
-                <p className="text-sm font-bold text-gray-800 flex items-center gap-1 line-clamp-1 max-w-[120px]">
-                  {location.city || "Select City"} <ChevronDown size={13} className="text-gray-400 group-hover:text-orange-500 transition-colors mt-0.5 shrink-0" />
-                </p>
-              </div>
-            </button>
+            {!location.city ? (
+              /* No city yet: show Detect button */
+              <button
+                onClick={detectLocation}
+                disabled={detecting}
+                className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-orange-50 transition-colors group shrink-0"
+              >
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-all ${
+                  detecting ? "bg-orange-500 animate-pulse" : "bg-gradient-to-br from-orange-500 to-rose-500"
+                }`}>
+                  <MapPin size={14} className="text-white" />
+                </div>
+                <div className="text-left leading-tight">
+                  <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wide">Delivery</p>
+                  <p className="text-sm font-bold text-orange-500">
+                    {detecting ? "Detecting…" : "Detect Location"}
+                  </p>
+                </div>
+              </button>
+            ) : (
+              /* City detected: show location + open drawer on click */
+              <button
+                onClick={() => dispatch(openLocationDrawer())}
+                className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-orange-50 transition-colors group shrink-0"
+              >
+                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-orange-500 to-rose-500 flex items-center justify-center shrink-0 shadow-sm shadow-orange-300 transition-all group-hover:shadow-md group-hover:shadow-orange-400">
+                  <MapPin size={14} className="text-white" />
+                </div>
+                <div className="text-left leading-tight">
+                  <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wide">Deliver to</p>
+                  <p className="text-sm font-bold text-gray-900 flex items-center gap-1 line-clamp-1 max-w-[120px]">
+                    {location.city} <ChevronDown size={13} className="text-gray-400 group-hover:text-orange-500 transition-colors mt-0.5 shrink-0" />
+                  </p>
+                </div>
+              </button>
+            )}
 
-            {/* ── Search ── */}
-            <SearchBar />
+            <div className="hidden md:block flex-1 max-w-2xl mx-auto">
+              {/* ── Search ── */}
+              <SearchBar />
+            </div>
+            
+            <div className="md:hidden flex-1" />
 
             {/* ── Right Actions ── */}
             <div className="flex items-center gap-1 shrink-0">
@@ -98,7 +158,7 @@ export default function Header() {
               >
                 <Heart size={20} className="text-gray-500 group-hover:text-rose-500 transition-colors" />
                 {wishlistCount > 0 && (
-                  <span className="absolute top-1 right-1 w-4 h-4 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white">
+                  <span className="absolute top-1 right-1 w-4 h-4 bg-gradient-to-r from-orange-500 to-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white shadow-sm">
                     {wishlistCount}
                   </span>
                 )}
@@ -129,8 +189,8 @@ export default function Header() {
                   </>
                 ) : (
                   <>
-                    <div className="w-8 h-8 rounded-full bg-orange-50 border-2 border-orange-200 flex items-center justify-center group-hover:bg-orange-100 transition-colors">
-                      <User size={14} className="text-orange-500" />
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-orange-500 to-rose-500 flex items-center justify-center group-hover:shadow-md group-hover:shadow-orange-400 transition-all">
+                      <User size={14} className="text-white" />
                     </div>
                     <div className="leading-tight text-left">
                       <p className="text-[10px] text-gray-400">Hello, Guest</p>
@@ -144,7 +204,7 @@ export default function Header() {
               {/* Cart */}
               <button
                 onClick={() => dispatch(toggleDrawer())}
-                className="flex items-center gap-2 px-3 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 active:scale-95 text-white text-sm font-semibold transition-all duration-150 shadow-md shadow-orange-200 relative ml-1"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-rose-500 hover:opacity-90 active:scale-95 text-white text-sm font-bold transition-all duration-150 shadow-md shadow-orange-500/30 relative ml-1"
               >
                 <ShoppingCart size={18} />
                 <span className="hidden sm:block">Cart</span>
@@ -157,15 +217,20 @@ export default function Header() {
 
             </div>
           </div>
+          
+          {/* ── Mobile Search Row ── */}
+          <div className="md:hidden pb-3 px-1 w-full relative z-40">
+            <SearchBar />
+          </div>
         </div>
 
-       
+
 
         {/* ── Mobile Drawer ── */}
         {menuOpen && (
           <div className="lg:hidden border-t border-gray-100 bg-white px-4 py-3 space-y-1 shadow-lg">
             {/* Location on mobile */}
-            <button 
+            <button
               onClick={() => {
                 dispatch(openLocationDrawer());
                 setMenuOpen(false);
