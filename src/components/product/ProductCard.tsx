@@ -197,7 +197,6 @@ export default function ProductCard({ product, className = "", width }: ProductC
               fontWeight: 700,
               color: "var(--color-primary)",
               background: "var(--color-primary-light)",
-              border: "1px solid var(--color-primary-border)",
               borderRadius: 5,
               padding: "2px 7px",
               letterSpacing: "0.06em",

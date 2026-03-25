@@ -9,8 +9,12 @@ import {
   X,
   MapPin,
   ChevronDown,
+  ChevronRight,
   Heart,
   Zap,
+  Package,
+  Headphones,
+  LogOut,
 } from "lucide-react";
 import SearchBar from "@/components/ui/SearchBar";
 import {
@@ -22,15 +26,7 @@ import {
   setLocationDetails,
 } from "@/store";
 
-const NAV_CATEGORIES = [
-  { label: "Groceries", emoji: "🥦" },
-  { label: "Fashion", emoji: "👗" },
-  { label: "Electronics", emoji: "📱" },
-  { label: "Beauty", emoji: "💄" },
-  { label: "Home & Kitchen", emoji: "🏠" },
-  { label: "Toys", emoji: "🧸" },
-  { label: "Sports", emoji: "⚽" },
-];
+
 
 
 export default function Header() {
@@ -173,7 +169,7 @@ export default function Header() {
                     dispatch(openAuthDrawer({ view: 'signin' }));
                   }
                 }}
-                className="hidden md:flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-orange-50 transition-colors border border-gray-100 hover:border-orange-200 group cursor-pointer"
+                className="flex items-center gap-2 px-2 md:px-3 py-2 rounded-xl hover:bg-orange-50 transition-colors border border-gray-100 hover:border-orange-200 group cursor-pointer"
               >
                 {isAuthenticated && user ? (
                   <>
@@ -182,7 +178,7 @@ export default function Header() {
                         {user.name?.charAt(0).toUpperCase()}
                       </span>
                     </div>
-                    <div className="leading-tight text-left">
+                    <div className="hidden md:block leading-tight text-left">
                       <p className="text-[10px] text-orange-500 font-semibold">Welcome back</p>
                       <p className="text-xs font-bold text-gray-800 max-w-[90px] truncate">{user.name}</p>
                     </div>
@@ -192,13 +188,13 @@ export default function Header() {
                     <div className="w-7 h-7 rounded-full bg-gradient-to-br from-orange-500 to-rose-500 flex items-center justify-center group-hover:shadow-md group-hover:shadow-orange-400 transition-all">
                       <User size={14} className="text-white" />
                     </div>
-                    <div className="leading-tight text-left">
+                    <div className="hidden md:block leading-tight text-left">
                       <p className="text-[10px] text-gray-400">Hello, Guest</p>
                       <p className="text-xs font-bold text-orange-500 group-hover:text-orange-600 transition-colors">Sign In</p>
                     </div>
                   </>
                 )}
-                <ChevronDown size={13} className="text-gray-400 group-hover:text-orange-500 transition-colors" />
+                <ChevronDown size={13} className="hidden md:block text-gray-400 group-hover:text-orange-500 transition-colors" />
               </button>
 
               {/* Cart */}
@@ -228,35 +224,116 @@ export default function Header() {
 
         {/* ── Mobile Drawer ── */}
         {menuOpen && (
-          <div className="lg:hidden border-t border-gray-100 bg-white px-4 py-3 space-y-1 shadow-lg">
-            {/* Location on mobile */}
+          <div className="lg:hidden border-t border-gray-100 bg-gradient-to-b from-white to-orange-50/30 px-4 py-5 shadow-xl animate-in slide-in-from-top-2 duration-300">
+
+            {/* ── User Section ── */}
+            <button
+              onClick={() => {
+                if (isAuthenticated) {
+                  dispatch(openAuthDrawer());
+                } else {
+                  dispatch(openAuthDrawer({ view: 'signin' }));
+                }
+                setMenuOpen(false);
+              }}
+              className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl bg-white border border-gray-100 shadow-sm mb-4 active:scale-[0.98] transition-all"
+            >
+              {isAuthenticated && user ? (
+                <>
+                  <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-orange-500 to-rose-500 flex items-center justify-center shadow-md shadow-orange-200">
+                    <span className="text-white text-sm font-black">{user.name?.charAt(0).toUpperCase()}</span>
+                  </div>
+                  <div className="flex-1 text-left">
+                    <p className="text-sm font-black text-gray-900">{user.name}</p>
+                    <p className="text-xs text-gray-500 font-medium">{user.email}</p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-orange-500 to-rose-500 flex items-center justify-center shadow-md shadow-orange-200">
+                    <User size={18} className="text-white" />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <p className="text-sm font-black text-gray-900">Sign In / Register</p>
+                    <p className="text-xs text-gray-500 font-medium">Access your account</p>
+                  </div>
+                </>
+              )}
+              <ChevronRight size={16} className="text-gray-400" />
+            </button>
+
+            {/* ── Location Card ── */}
             <button
               onClick={() => {
                 dispatch(openLocationDrawer());
                 setMenuOpen(false);
               }}
-              className="w-full flex items-center gap-2 px-4 py-3 rounded-2xl bg-gradient-to-r from-orange-50 to-white border border-orange-100 mb-4 text-left shadow-sm active:scale-[0.98] transition-all"
+              className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl bg-white border border-orange-100 shadow-sm mb-4 active:scale-[0.98] transition-all"
             >
-              <div className="w-9 h-9 rounded-xl bg-white border border-orange-100 flex items-center justify-center shadow-sm">
-                <MapPin size={16} className="text-orange-500" />
+              <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center border border-orange-100">
+                <MapPin size={18} className="text-orange-500" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 text-left">
                 <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Delivering to</p>
-                <p className="text-sm font-black text-gray-900 line-clamp-1">{location.city || "Select City"}</p>
+                <p className="text-sm font-black text-gray-900">{location.city || "Select City"}{location.pin ? `, ${location.pin}` : ''}</p>
               </div>
-              <ChevronDown size={14} className="text-orange-400 mr-1" />
+              <span className="text-[10px] font-bold text-orange-500 bg-orange-50 px-2 py-1 rounded-lg border border-orange-100">Change</span>
             </button>
-            {NAV_CATEGORIES.map((cat) => (
+
+            {/* ── Quick Links ── */}
+            <div className="space-y-1 mb-4">
               <Link
-                key={cat.label}
-                href={`/${cat.label.toLowerCase().replace(/\s+/g, "-")}`}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"
+                href="/orders"
                 onClick={() => setMenuOpen(false)}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white transition-colors group"
               >
-                <span className="text-base">{cat.emoji}</span>
-                {cat.label}
+                <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
+                  <Package size={16} className="text-blue-500" />
+                </div>
+                <span className="flex-1 text-sm font-bold text-gray-800">My Orders</span>
+                <ChevronRight size={15} className="text-gray-300 group-hover:text-orange-500 transition-colors" />
               </Link>
-            ))}
+
+              <button
+                onClick={() => {
+                  dispatch(openWishlistDrawer());
+                  setMenuOpen(false);
+                }}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white transition-colors group"
+              >
+                <div className="w-9 h-9 rounded-lg bg-rose-50 flex items-center justify-center">
+                  <Heart size={16} className="text-rose-500" />
+                </div>
+                <span className="flex-1 text-left text-sm font-bold text-gray-800">Wishlist</span>
+                {wishlistCount > 0 && (
+                  <span className="text-[10px] font-bold text-white bg-rose-500 px-2 py-0.5 rounded-full">{wishlistCount}</span>
+                )}
+                <ChevronRight size={15} className="text-gray-300 group-hover:text-orange-500 transition-colors" />
+              </button>
+            </div>
+
+            {/* ── Support Bar ── */}
+            <div className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-gray-50 border border-gray-100">
+              <Headphones size={16} className="text-gray-400" />
+              <div className="flex-1">
+                <p className="text-xs font-bold text-gray-700">Need help?</p>
+                <p className="text-[10px] text-gray-400 font-medium">24/7 Customer Support</p>
+              </div>
+            </div>
+
+            {/* ── Logout (only if authenticated) ── */}
+            {isAuthenticated && (
+              <button
+                onClick={() => {
+                  dispatch(openAuthDrawer());
+                  setMenuOpen(false);
+                }}
+                className="w-full flex items-center justify-center gap-2 mt-4 py-3 rounded-xl bg-white border border-gray-200 text-gray-500 hover:text-red-500 hover:border-red-200 hover:bg-red-50 text-sm font-bold transition-all"
+              >
+                <LogOut size={15} />
+                Sign Out
+              </button>
+            )}
           </div>
         )}
       </header>
